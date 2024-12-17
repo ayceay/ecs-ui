@@ -11,8 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { FindAll } from '../models/find-all';
 import { User } from '../models/user';
+import { UserPaginationModel } from '../models/user-pagination-model';
 import { usersDelete } from '../fn/user/users-delete';
 import { UsersDelete$Params } from '../fn/user/users-delete';
 import { usersIdDelete } from '../fn/user/users-id-delete';
@@ -25,6 +25,10 @@ import { usersIdPut } from '../fn/user/users-id-put';
 import { UsersIdPut$Params } from '../fn/user/users-id-put';
 import { usersLoginPost } from '../fn/user/users-login-post';
 import { UsersLoginPost$Params } from '../fn/user/users-login-post';
+import { usersPasswordChangePost$Json } from '../fn/user/users-password-change-post-json';
+import { UsersPasswordChangePost$Json$Params } from '../fn/user/users-password-change-post-json';
+import { usersPasswordChangePost$Xml } from '../fn/user/users-password-change-post-xml';
+import { UsersPasswordChangePost$Xml$Params } from '../fn/user/users-password-change-post-xml';
 import { usersPost$Json } from '../fn/user/users-post-json';
 import { UsersPost$Json$Params } from '../fn/user/users-post-json';
 import { usersPost$Xml } from '../fn/user/users-post-xml';
@@ -38,35 +42,6 @@ import { UsersQueryPagePost$Xml$Params } from '../fn/user/users-query-page-post-
 export class UserService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
-  }
-
-  /** Path part for operation `usersLoginPost()` */
-  static readonly UsersLoginPostPath = '/users/login';
-
-  /**
-   * Login user.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `usersLoginPost()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  usersLoginPost$Response(params: UsersLoginPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return usersLoginPost(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Login user.
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `usersLoginPost$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  usersLoginPost(params: UsersLoginPost$Params, context?: HttpContext): Observable<void> {
-    return this.usersLoginPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
   }
 
   /** Path part for operation `usersPost()` */
@@ -153,6 +128,90 @@ export class UserService extends BaseService {
     );
   }
 
+  /** Path part for operation `usersLoginPost()` */
+  static readonly UsersLoginPostPath = '/users/login';
+
+  /**
+   * Login user.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `usersLoginPost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  usersLoginPost$Response(params: UsersLoginPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return usersLoginPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Login user.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `usersLoginPost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  usersLoginPost(params: UsersLoginPost$Params, context?: HttpContext): Observable<void> {
+    return this.usersLoginPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `usersPasswordChangePost()` */
+  static readonly UsersPasswordChangePostPath = '/users/password-change';
+
+  /**
+   * Update user password.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `usersPasswordChangePost$Json()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  usersPasswordChangePost$Json$Response(params: UsersPasswordChangePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<User>> {
+    return usersPasswordChangePost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update user password.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `usersPasswordChangePost$Json$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  usersPasswordChangePost$Json(params: UsersPasswordChangePost$Json$Params, context?: HttpContext): Observable<User> {
+    return this.usersPasswordChangePost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<User>): User => r.body)
+    );
+  }
+
+  /**
+   * Update user password.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `usersPasswordChangePost$Xml()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  usersPasswordChangePost$Xml$Response(params: UsersPasswordChangePost$Xml$Params, context?: HttpContext): Observable<StrictHttpResponse<User>> {
+    return usersPasswordChangePost$Xml(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update user password.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `usersPasswordChangePost$Xml$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  usersPasswordChangePost$Xml(params: UsersPasswordChangePost$Xml$Params, context?: HttpContext): Observable<User> {
+    return this.usersPasswordChangePost$Xml$Response(params, context).pipe(
+      map((r: StrictHttpResponse<User>): User => r.body)
+    );
+  }
+
   /** Path part for operation `usersQueryPagePost()` */
   static readonly UsersQueryPagePostPath = '/users/queryPage';
 
@@ -164,7 +223,7 @@ export class UserService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  usersQueryPagePost$Json$Response(params: UsersQueryPagePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAll>> {
+  usersQueryPagePost$Json$Response(params: UsersQueryPagePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPaginationModel>> {
     return usersQueryPagePost$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -176,9 +235,9 @@ export class UserService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  usersQueryPagePost$Json(params: UsersQueryPagePost$Json$Params, context?: HttpContext): Observable<FindAll> {
+  usersQueryPagePost$Json(params: UsersQueryPagePost$Json$Params, context?: HttpContext): Observable<UserPaginationModel> {
     return this.usersQueryPagePost$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<FindAll>): FindAll => r.body)
+      map((r: StrictHttpResponse<UserPaginationModel>): UserPaginationModel => r.body)
     );
   }
 
@@ -190,7 +249,7 @@ export class UserService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  usersQueryPagePost$Xml$Response(params: UsersQueryPagePost$Xml$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAll>> {
+  usersQueryPagePost$Xml$Response(params: UsersQueryPagePost$Xml$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPaginationModel>> {
     return usersQueryPagePost$Xml(this.http, this.rootUrl, params, context);
   }
 
@@ -202,9 +261,9 @@ export class UserService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  usersQueryPagePost$Xml(params: UsersQueryPagePost$Xml$Params, context?: HttpContext): Observable<FindAll> {
+  usersQueryPagePost$Xml(params: UsersQueryPagePost$Xml$Params, context?: HttpContext): Observable<UserPaginationModel> {
     return this.usersQueryPagePost$Xml$Response(params, context).pipe(
-      map((r: StrictHttpResponse<FindAll>): FindAll => r.body)
+      map((r: StrictHttpResponse<UserPaginationModel>): UserPaginationModel => r.body)
     );
   }
 

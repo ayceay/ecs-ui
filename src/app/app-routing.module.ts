@@ -31,6 +31,7 @@ import {AppInvoiceComponent} from './pages/app.invoice.component';
 import {AppHelpComponent} from './pages/app.help.component';
 import {BlocksComponent} from './blocks/blocks/blocks.component';
 import {UserComponent} from "./modules/user/user.component";
+import {ProductGroupComponent} from "./modules/product-group/product-group.component";
 
 @NgModule({
     imports: [
@@ -65,6 +66,7 @@ import {UserComponent} from "./modules/user/user.component";
                     {path: 'documentation', component: DocumentationComponent},
                     {path: 'blocks', component: BlocksComponent},
                     {path: 'ecs/users', component: UserComponent},
+                    {path: 'ecs/product-groups', component: ProductGroupComponent},
                 ]
             },
             {path: 'error', component: AppErrorComponent},

@@ -8,16 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserPaginationModel } from '../../models/user-pagination-model';
-import { UserQueryModel } from '../../models/user-query-model';
+import { User } from '../../models/user';
 
-export interface UsersQueryPagePost$Json$Params {
+export interface UsersPasswordChangePost$Json$Params {
   authorization?: string;
-      body: UserQueryModel
+      body: any
 }
 
-export function usersQueryPagePost$Json(http: HttpClient, rootUrl: string, params: UsersQueryPagePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPaginationModel>> {
-  const rb = new RequestBuilder(rootUrl, usersQueryPagePost$Json.PATH, 'post');
+export function usersPasswordChangePost$Json(http: HttpClient, rootUrl: string, params: UsersPasswordChangePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<User>> {
+  const rb = new RequestBuilder(rootUrl, usersPasswordChangePost$Json.PATH, 'post');
   if (params) {
     rb.header('authorization', params.authorization, {});
     rb.body(params.body, 'application/json');
@@ -28,9 +27,9 @@ export function usersQueryPagePost$Json(http: HttpClient, rootUrl: string, param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UserPaginationModel>;
+      return r as StrictHttpResponse<User>;
     })
   );
 }
 
-usersQueryPagePost$Json.PATH = '/users/queryPage';
+usersPasswordChangePost$Json.PATH = '/users/password-change';

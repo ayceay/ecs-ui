@@ -4,7 +4,7 @@
 
 import {User} from "./user";
 
-export interface FindAll {
+export interface UserPaginationModel {
   currentPage?: number;
   totalItems?: number;
   totalPages?: number;

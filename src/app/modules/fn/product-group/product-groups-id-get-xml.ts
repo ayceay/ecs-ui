@@ -8,19 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserPaginationModel } from '../../models/user-pagination-model';
-import { UserQueryModel } from '../../models/user-query-model';
+import { ProductGroup } from '../../models/product-group';
 
-export interface UsersQueryPagePost$Xml$Params {
+export interface ProductGroupsIdGet$Xml$Params {
+  id: string;
   authorization?: string;
-      body: UserQueryModel
 }
 
-export function usersQueryPagePost$Xml(http: HttpClient, rootUrl: string, params: UsersQueryPagePost$Xml$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPaginationModel>> {
-  const rb = new RequestBuilder(rootUrl, usersQueryPagePost$Xml.PATH, 'post');
+export function productGroupsIdGet$Xml(http: HttpClient, rootUrl: string, params: ProductGroupsIdGet$Xml$Params, context?: HttpContext): Observable<StrictHttpResponse<ProductGroup>> {
+  const rb = new RequestBuilder(rootUrl, productGroupsIdGet$Xml.PATH, 'get');
   if (params) {
+    rb.path('id', params.id, {});
     rb.header('authorization', params.authorization, {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -28,9 +27,9 @@ export function usersQueryPagePost$Xml(http: HttpClient, rootUrl: string, params
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UserPaginationModel>;
+      return r as StrictHttpResponse<ProductGroup>;
     })
   );
 }
 
-usersQueryPagePost$Xml.PATH = '/users/queryPage';
+productGroupsIdGet$Xml.PATH = '/product-groups/{id}';

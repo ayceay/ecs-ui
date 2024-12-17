@@ -8,16 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserPaginationModel } from '../../models/user-pagination-model';
-import { UserQueryModel } from '../../models/user-query-model';
+import { ProductGroupPaginationModel } from '../../models/product-group-pagination-model';
+import { ProductGroupQuery } from '../../models/product-group-query';
 
-export interface UsersQueryPagePost$Json$Params {
+export interface ProductGroupsQueryPagePost$Json$Params {
   authorization?: string;
-      body: UserQueryModel
+      body: ProductGroupQuery
 }
 
-export function usersQueryPagePost$Json(http: HttpClient, rootUrl: string, params: UsersQueryPagePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPaginationModel>> {
-  const rb = new RequestBuilder(rootUrl, usersQueryPagePost$Json.PATH, 'post');
+export function productGroupsQueryPagePost$Json(http: HttpClient, rootUrl: string, params: ProductGroupsQueryPagePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ProductGroupPaginationModel>> {
+  const rb = new RequestBuilder(rootUrl, productGroupsQueryPagePost$Json.PATH, 'post');
   if (params) {
     rb.header('authorization', params.authorization, {});
     rb.body(params.body, 'application/json');
@@ -28,9 +28,9 @@ export function usersQueryPagePost$Json(http: HttpClient, rootUrl: string, param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UserPaginationModel>;
+      return r as StrictHttpResponse<ProductGroupPaginationModel>;
     })
   );
 }
 
-usersQueryPagePost$Json.PATH = '/users/queryPage';
+productGroupsQueryPagePost$Json.PATH = '/product-groups/queryPage';

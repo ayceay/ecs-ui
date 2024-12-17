@@ -8,26 +8,28 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Authentication } from '../../models/authentication';
+import { Product } from '../../models/product';
 
-export interface UsersLoginPost$Params {
-      body: Authentication
+export interface ProductsPost$Json$Params {
+  authorization?: string;
+      body: Product
 }
 
-export function usersLoginPost(http: HttpClient, rootUrl: string, params: UsersLoginPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, usersLoginPost.PATH, 'post');
+export function productsPost$Json(http: HttpClient, rootUrl: string, params: ProductsPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Product>> {
+  const rb = new RequestBuilder(rootUrl, productsPost$Json.PATH, 'post');
   if (params) {
+    rb.header('authorization', params.authorization, {});
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<Product>;
     })
   );
 }
 
-usersLoginPost.PATH = '/users/login';
+productsPost$Json.PATH = '/products/';
