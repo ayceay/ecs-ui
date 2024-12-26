@@ -8,18 +8,18 @@
                         <button pButton pRipple label="Yeni Kayıt" icon="pi pi-plus" class="p-button-success mr-2"
                                 (click)="openNew()"></button>
                         <button pButton pRipple label="Sil" icon="pi pi-trash" class="p-button-danger"
-                                (click)="deleteSelectedProductGroups()"
-                                [disabled]="!selectedProductGroups || !selectedProductGroups.length"></button>
+                                (click)="deleteSelectedProducts()"
+                                [disabled]="!selectedProducts || !selectedProducts.length"></button>
                     </div>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="productGroups"
+            <p-table #dt [value]="products"
                      [lazy]="true"
-                     (onLazyLoad)="loadProductGroups($event)"
+                     (onLazyLoad)="loadProducts($event)"
                      dataKey="id"
                      [tableStyle]="{ 'min-width': '75rem' }"
-                     [(selection)]="selectedProductGroups"
+                     [(selection)]="selectedProducts"
                      (selectionChange)="onSelectionChange($event)"
                      [selectionPageOnly]="true"
                      [paginator]="true"
@@ -75,7 +75,7 @@
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button-rounded p-button-success mr-2"
-                                        (click)="editProductGroup(productGroup)"></button>
+                                        (click)="editProduct(productGroup)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
                                         (click)="deleteUser(productGroup)"></button>
                             </div>
@@ -85,10 +85,10 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="productGroupDialog" [style]="{width: '450px'}" header="Ürün Grubu Oluşturma"
+        <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Ürün Grubu Oluşturma"
                   [modal]="true"
                   class="p-fluid">
-            <form [formGroup]="productGroupForm">
+            <form [formGroup]="productForm">
                 <div class="form-group">
                     <p-card>
                         <ng-template pTemplate="content">
@@ -107,7 +107,7 @@
                             <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
                                     (click)="hideDialog()"></button>
                             <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
-                                    type="submit" [disabled]="productGroupForm.invalid" (click)="saveUser()"></button>
+                                    type="submit" [disabled]="productForm.invalid" (click)="saveUser()"></button>
                         </ng-template>
                     </p-card>
                 </div>
@@ -115,27 +115,27 @@
             </form>
         </p-dialog>
 
-        <p-dialog [(visible)]="deleteProductGroupDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="productGroup">Ürün Grubunu Silmek İstiyor musunuz? <b>{{ productGroup.name }}</b>?</span>
+                <span *ngIf="product">Ürün Grubunu Silmek İstiyor musunuz? <b>{{ product.name }}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-                        (click)="deleteProductGroupDialog = false"></button>
+                        (click)="deleteProductDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
                         (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="deleteProductGroupsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
                 <span>Are you sure you want to delete selected products?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-                        (click)="deleteProductGroupsDialog = false"></button>
+                        (click)="deleteProductsDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
                         (click)="confirmDeleteSelected()"></button>
             </ng-template>

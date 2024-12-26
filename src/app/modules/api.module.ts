@@ -21,6 +21,7 @@ import {RippleModule} from "primeng/ripple";
 import {MessageService} from "primeng/api";
 import {HttpSecurityInterceptor} from "./interceptor/http-security-interceptor";
 import { ProductGroupComponent } from './product-group/product-group.component';
+import { ProductComponent } from './product/product.component';
 
 /**
  * Module that provides all services and configuration.
@@ -41,7 +42,7 @@ import { ProductGroupComponent } from './product-group/product-group.component';
         DatePipe
     ],
     exports: [],
-    declarations: [UserComponent, ProductGroupComponent],
+    declarations: [UserComponent, ProductGroupComponent, ProductComponent],
     providers: [
         UserService,
         ApiConfiguration,

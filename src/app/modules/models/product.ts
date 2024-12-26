@@ -9,6 +9,6 @@ export interface Product {
   max_discount?: string;
   name?: string;
   price?: string;
-  product_group_id: string;
+  product_group_id?: string;
   updated_at?: string;
 }

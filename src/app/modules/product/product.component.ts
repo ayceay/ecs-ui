@@ -1,38 +1,38 @@
 import {Component, inject, ViewChild} from '@angular/core';
 import {Table, TableLazyLoadEvent, TableSelectAllChangeEvent} from "primeng/table";
 import {FormBuilder, Validators} from "@angular/forms";
-import {User} from "../models/user";
 import {FilterMetadata, MessageService} from "primeng/api";
 import {AppBreadcrumbService} from "../../app.breadcrumb.service";
-import {ProductGroup} from "../models/product-group";
-import {ProductGroupService} from "../services/product-group.service";
+import {Product} from "../models/product";
+import {ProductService} from "../services/product.service";
 
 @Component({
-  selector: 'app-product-group',
-  templateUrl: './product-group.component.html'
+    selector: 'app-product',
+    templateUrl: './product.component.html'
 })
-export class ProductGroupComponent {
+export class ProductComponent {
+
     @ViewChild('dt') table: Table;
 
     private formBuilder = inject(FormBuilder);
 
-    productGroupForm = this.formBuilder.group({
+    productForm = this.formBuilder.group({
         name: ['', Validators.required]
     });
 
     loading = false;
 
-    productGroupDialog: boolean;
+    productDialog: boolean;
 
-    deleteProductGroupDialog: boolean = false;
+    deleteProductDialog: boolean = false;
 
-    deleteProductGroupsDialog: boolean = false;
+    deleteProductsDialog: boolean = false;
 
-    productGroups: ProductGroup[];
+    products: Product[];
 
-    productGroup: ProductGroup;
+    product: Product;
 
-    selectedProductGroups: ProductGroup[];
+    selectedProducts: Product[];
 
     submitted: boolean;
 
@@ -42,7 +42,7 @@ export class ProductGroupComponent {
 
     totalRecords: number;
 
-    constructor(private productGroupService: ProductGroupService, private messageService: MessageService,
+    constructor(private productService: ProductService, private messageService: MessageService,
                 private breadcrumbService: AppBreadcrumbService) {
 
         this.breadcrumbService.setItems([
@@ -55,7 +55,7 @@ export class ProductGroupComponent {
         this.refresh();
     }
 
-    loadProductGroups(event: TableLazyLoadEvent) {
+    loadProducts(event: TableLazyLoadEvent) {
         let dtFilter: { [k: string]: any; };
         if (event.filters) {
             dtFilter = Object.fromEntries(Object.entries(event.filters).map(([key, value]) => [key, (value as FilterMetadata).value]));
@@ -63,7 +63,7 @@ export class ProductGroupComponent {
         this.loading = true;
         console.log(event);
         let pageNumber = (event.first === 0 || event.first == undefined) ? 0 : event.first / (event.rows == undefined ? 1 : event.rows);
-        this.productGroupService.productGroupsQueryPagePost$Json({
+        this.productService.productsQueryPagePost$Json({
             body: {
                 page: pageNumber,
                 size: event.rows,
@@ -71,7 +71,7 @@ export class ProductGroupComponent {
             }
         }).subscribe({
             next: data => {
-                this.productGroups = data.tutorials;
+                this.products = data.tutorials;
                 this.totalRecords = data.totalItems;
             },
             error: err => {
@@ -86,35 +86,35 @@ export class ProductGroupComponent {
     openNew() {
         this.refresh();
         this.submitted = false;
-        this.productGroupDialog = true;
+        this.productDialog = true;
     }
 
-    deleteSelectedProductGroups() {
-        this.deleteProductGroupsDialog = true;
+    deleteSelectedProducts() {
+        this.deleteProductsDialog = true;
     }
 
-    editProductGroup(product_group: ProductGroup) {
+    editProduct(product: Product) {
         this.refresh();
-        this.productGroup = product_group;
-        this.productGroupForm.patchValue(product_group);
-        this.productGroupDialog = true;
+        this.product = product;
+        this.productForm.patchValue(product);
+        this.productDialog = true;
     }
 
-    deleteUser(product_group: ProductGroup) {
-        this.deleteProductGroupDialog = true;
-        this.productGroup = {...product_group};
+    deleteUser(product: Product) {
+        this.deleteProductDialog = true;
+        this.product = {...product};
     }
 
     confirmDeleteSelected() {
-        this.deleteProductGroupsDialog = false;
-        this.productGroups = this.productGroups.filter(val => !this.selectedProductGroups.includes(val));
+        this.deleteProductsDialog = false;
+        this.products = this.products.filter(val => !this.selectedProducts.includes(val));
         this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});
-        this.selectedProductGroups = null;
+        this.selectedProducts = null;
     }
 
     confirmDelete() {
-        this.deleteProductGroupDialog = false;
-        this.productGroupService.productGroupsIdDelete({id: this.productGroup.id.toString()}).subscribe({
+        this.deleteProductDialog = false;
+        this.productService.productsIdDelete({id: this.product.id.toString()}).subscribe({
             next: data => {
                 this.messageService.add({
                     severity: 'success',
@@ -128,7 +128,7 @@ export class ProductGroupComponent {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Hata',
-                    detail: 'Ürün Grubu Silinirken Hata! error: ' + err,
+                    detail: 'Ürün Silinirken Hata! error: ' + err,
                     life: 3000
                 });
             },
@@ -136,23 +136,26 @@ export class ProductGroupComponent {
                 this.refresh();
             }
         })
-        this.productGroup = {};
+        this.product = {};
     }
 
     hideDialog() {
         this.refresh();
-        this.productGroupDialog = false;
+        this.productDialog = false;
         this.submitted = false;
     }
 
     saveUser() {
-        if (this.productGroup) {
-            this.productGroupService.productGroupsIdPut({id: this.productGroup.id.toString(), body: this.productGroupForm.value}).subscribe({
+        if (this.product) {
+            this.productService.productsIdPut({
+                id: this.product.id.toString(),
+                body: this.productForm.value
+            }).subscribe({
                 next: data => {
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Başarılı',
-                        detail: 'Ürün Grubu Güncellendi',
+                        detail: 'Ürün Güncellendi',
                         life: 3000
                     });
                     this.table.reset();
@@ -163,18 +166,18 @@ export class ProductGroupComponent {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Hata',
-                        detail: 'Ürün Grubu Güncellenirken Hata! error: ' + err,
+                        detail: 'Ürün Güncellenirken Hata! error: ' + err,
                         life: 3000
                     });
                 }
             });
         } else {
-            this.productGroupService.productGroupsPost$Json({body: this.productGroupForm.value}).subscribe({
+            this.productService.productsPost$Json({body: this.productForm.value}).subscribe({
                 next: data => {
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Başarılı',
-                        detail: 'Ürün Grubu Oluşturuldu',
+                        detail: 'Ürün Oluşturuldu',
                         life: 3000
                     });
                     this.table.reset();
@@ -185,7 +188,7 @@ export class ProductGroupComponent {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Hata',
-                        detail: 'Ürün Grubu Oluşturulurken Hata! error: ' + err,
+                        detail: 'Ürün Oluşturulurken Hata! error: ' + err,
                         life: 3000
                     });
                 }
@@ -204,12 +207,13 @@ export class ProductGroupComponent {
     }
 
     get name() {
-        return this.productGroupForm.get('name');
+        return this.productForm.get('name');
     }
 
     refresh() {
-        this.productGroupForm.reset();
-        this.selectedProductGroups = [];
-        this.productGroup = null;
+        this.productForm.reset();
+        this.selectedProducts = [];
+        this.product = null;
     }
+
 }
