@@ -15,6 +15,10 @@ import { ProductGroup } from '../models/product-group';
 import { ProductGroupPaginationModel } from '../models/product-group-pagination-model';
 import { productGroupsDelete } from '../fn/product-group/product-groups-delete';
 import { ProductGroupsDelete$Params } from '../fn/product-group/product-groups-delete';
+import { productGroupsFindAllGet$Json } from '../fn/product-group/product-groups-find-all-get-json';
+import { ProductGroupsFindAllGet$Json$Params } from '../fn/product-group/product-groups-find-all-get-json';
+import { productGroupsFindAllGet$Xml } from '../fn/product-group/product-groups-find-all-get-xml';
+import { ProductGroupsFindAllGet$Xml$Params } from '../fn/product-group/product-groups-find-all-get-xml';
 import { productGroupsIdDelete } from '../fn/product-group/product-groups-id-delete';
 import { ProductGroupsIdDelete$Params } from '../fn/product-group/product-groups-id-delete';
 import { productGroupsIdGet$Json } from '../fn/product-group/product-groups-id-get-json';
@@ -174,6 +178,61 @@ export class ProductGroupService extends BaseService {
   productGroupsQueryPagePost$Xml(params: ProductGroupsQueryPagePost$Xml$Params, context?: HttpContext): Observable<ProductGroupPaginationModel> {
     return this.productGroupsQueryPagePost$Xml$Response(params, context).pipe(
       map((r: StrictHttpResponse<ProductGroupPaginationModel>): ProductGroupPaginationModel => r.body)
+    );
+  }
+
+  /** Path part for operation `productGroupsFindAllGet()` */
+  static readonly ProductGroupsFindAllGetPath = '/product-groups/findAll';
+
+  /**
+   * Get all product group.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `productGroupsFindAllGet$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  productGroupsFindAllGet$Json$Response(params?: ProductGroupsFindAllGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ProductGroup>>> {
+    return productGroupsFindAllGet$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get all product group.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `productGroupsFindAllGet$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  productGroupsFindAllGet$Json(params?: ProductGroupsFindAllGet$Json$Params, context?: HttpContext): Observable<Array<ProductGroup>> {
+    return this.productGroupsFindAllGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<ProductGroup>>): Array<ProductGroup> => r.body)
+    );
+  }
+
+  /**
+   * Get all product group.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `productGroupsFindAllGet$Xml()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  productGroupsFindAllGet$Xml$Response(params?: ProductGroupsFindAllGet$Xml$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ProductGroup>>> {
+    return productGroupsFindAllGet$Xml(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get all product group.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `productGroupsFindAllGet$Xml$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  productGroupsFindAllGet$Xml(params?: ProductGroupsFindAllGet$Xml$Params, context?: HttpContext): Observable<Array<ProductGroup>> {
+    return this.productGroupsFindAllGet$Xml$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<ProductGroup>>): Array<ProductGroup> => r.body)
     );
   }
 

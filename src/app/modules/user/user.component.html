@@ -153,7 +153,7 @@
                     <p-card>
                         <ng-template pTemplate="content">
                             <div class="field">
-                                <label for="name">Ad</label>
+                                <label for="name">Ad: </label>
                                 <input type="text" pInputText id="name" formControlName="name" autofocus
                                        class="form-control"/>
                                 <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
@@ -163,7 +163,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label for="surname">Soyad</label>
+                                <label for="surname">Soyad: </label>
                                 <input type="text" pInputText id="surname" formControlName="surname" autofocus
                                        class="form-control"/>
                                 <div *ngIf="surname.invalid && (surname.dirty || surname.touched)"
@@ -174,7 +174,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label for="username">Kullanıcı Adı</label>
+                                <label for="username">Kullanıcı Adı: </label>
                                 <input type="text" pInputText id="username" formControlName="username" autofocus
                                        [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.username}"/>
                                 <div *ngIf="username.invalid && (username.dirty || username.touched)"

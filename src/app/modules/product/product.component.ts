@@ -5,6 +5,8 @@ import {FilterMetadata, MessageService} from "primeng/api";
 import {AppBreadcrumbService} from "../../app.breadcrumb.service";
 import {Product} from "../models/product";
 import {ProductService} from "../services/product.service";
+import {ProductGroup} from "../models/product-group";
+import {ProductGroupService} from "../services/product-group.service";
 
 @Component({
     selector: 'app-product',
@@ -17,8 +19,12 @@ export class ProductComponent {
     private formBuilder = inject(FormBuilder);
 
     productForm = this.formBuilder.group({
-        name: ['', Validators.required]
+        name: ['', Validators.required],
+        price: ['' , Validators.required],
+        max_discount: ['', Validators.required],
+        product_group_id: ['']
     });
+
 
     loading = false;
 
@@ -38,11 +44,13 @@ export class ProductComponent {
 
     rowsPerPageOptions = [10, 25, 50];
 
-    selectAll: boolean;
+    productGroups: ProductGroup[];
 
     totalRecords: number;
 
-    constructor(private productService: ProductService, private messageService: MessageService,
+    constructor(private productService: ProductService,
+                private messageService: MessageService,
+                private productGroupService: ProductGroupService,
                 private breadcrumbService: AppBreadcrumbService) {
 
         this.breadcrumbService.setItems([
@@ -53,6 +61,9 @@ export class ProductComponent {
 
     ngOnInit() {
         this.refresh();
+        this.productGroupService.productGroupsFindAllGet$Json().subscribe(productGroups => {
+            this.productGroups = productGroups;
+        });
     }
 
     loadProducts(event: TableLazyLoadEvent) {
@@ -100,7 +111,7 @@ export class ProductComponent {
         this.productDialog = true;
     }
 
-    deleteUser(product: Product) {
+    deleteProduct(product: Product) {
         this.deleteProductDialog = true;
         this.product = {...product};
     }
@@ -140,12 +151,13 @@ export class ProductComponent {
     }
 
     hideDialog() {
+        console.log(this.productForm);
         this.refresh();
         this.productDialog = false;
         this.submitted = false;
     }
 
-    saveUser() {
+    saveProduct() {
         if (this.product) {
             this.productService.productsIdPut({
                 id: this.product.id.toString(),
@@ -208,6 +220,18 @@ export class ProductComponent {
 
     get name() {
         return this.productForm.get('name');
+    }
+
+    get price() {
+        return this.productForm.get('price');
+    }
+
+    get max_discount() {
+        return this.productForm.get('max_discount');
+    }
+
+    get product_group_id() {
+        return this.productForm.get('product_group_id');
     }
 
     refresh() {

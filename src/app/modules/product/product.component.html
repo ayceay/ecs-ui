@@ -46,6 +46,25 @@
                             </div>
                         </th>
 
+                        <th pSortableColumn="price">
+                            <div class="flex justify-content-between align-items-center">
+                                Ürün Fiyatı
+                                <p-sortIcon field="price">Ürün Fiyatı</p-sortIcon>
+                            </div>
+                        </th>
+                        <th pSortableColumn="max_discount">
+                            <div class="flex justify-content-between align-items-center">
+                                Ürün Max İskontosu
+                                <p-sortIcon field="max_discount">Ürün Max İskontosu</p-sortIcon>
+                            </div>
+                        </th>
+                        <th pSortableColumn="product_group">
+                            <div class="flex justify-content-between align-items-center">
+                                Ürün Grubu
+                                <p-sortIcon field="product_group.name">Ürün Grubu</p-sortIcon>
+                            </div>
+                        </th>
+
                         <th></th>
                     </tr>
                     <tr>
@@ -53,7 +72,8 @@
                         </th>
                         <th>
                             <div class="flex justify-content-between align-items-center">
-                                <p-columnFilter type="text" field="name" [showMenu]="false" placeholder="Ada Göre Ara"></p-columnFilter>
+                                <p-columnFilter type="text" field="name" [showMenu]="false"
+                                                placeholder="Ada Göre Ara"></p-columnFilter>
                             </div>
                         </th>
                         <th>
@@ -63,21 +83,30 @@
 
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-productGroup>
+                <ng-template pTemplate="body" let-product>
                     <tr>
                         <td>
-                            <p-tableCheckbox [value]="productGroup"></p-tableCheckbox>
+                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
                         </td>
-                        <td style="width:100%; min-width:10rem;"><span class="p-column-title">Ad</span>
-                            {{ productGroup.name }}
+                        <td style="width:25%; min-width:10rem;"><span class="p-column-title">Ad</span>
+                            {{ product.name }}
+                        </td>
+                        <td style="width:25%; min-width:10rem;"><span class="p-column-title">Ad</span>
+                            {{ product.price }}
+                        </td>
+                        <td style="width:25%; min-width:10rem;"><span class="p-column-title">Ad</span>
+                            {{ product.max_discount }}
+                        </td>
+                        <td style="width:25%; min-width:10rem;"><span class="p-column-title">Ad</span>
+                            {{ product.product_group?.name }}
                         </td>
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button-rounded p-button-success mr-2"
-                                        (click)="editProduct(productGroup)"></button>
+                                        (click)="editProduct(product)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                                        (click)="deleteUser(productGroup)"></button>
+                                        (click)="deleteProduct(product)"></button>
                             </div>
                         </td>
                     </tr>
@@ -85,7 +114,7 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Ürün Grubu Oluşturma"
+        <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Ürün Oluşturma"
                   [modal]="true"
                   class="p-fluid">
             <form [formGroup]="productForm">
@@ -93,12 +122,55 @@
                     <p-card>
                         <ng-template pTemplate="content">
                             <div class="field">
-                                <label for="name">Ad</label>
+                                <label for="name">Ürün Grubu: </label>
+                                <p-dropdown
+                                    [options]="productGroups"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    formControlName="product_group_id"
+                                    [filter]="true"
+                                    filterBy="name"
+                                    [showClear]="true"
+                                    placeholder="Ürün grubu seçiniz">
+                                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ selectedOption.name }}</div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template let-country pTemplate="item">
+                                        <div class="flex align-items-center gap-2">
+                                            <div>{{ country.name }}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                            <div class="field">
+                                <label for="name">Ad: </label>
                                 <input type="text" pInputText id="name" formControlName="name" autofocus
-                                       class="form-control"/>
+                                />
                                 <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
                                     <div *ngIf="name.errors?.['required']">
                                         Ad alanı zorunlu.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="price">Fiyat: </label>
+                                <input type="text" pInputText id="price" formControlName="price"/>
+                                <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger">
+                                    <div *ngIf="price.errors?.['required']">
+                                        Fiyat alanı zorunlu.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="max_discount">Max İskonto: </label>
+                                <input type="text" pInputText id="max_discount"
+                                       formControlName="max_discount"/>
+                                <div *ngIf="max_discount.invalid && (max_discount.dirty || max_discount.touched)"
+                                     class="alert alert-danger">
+                                    <div *ngIf="max_discount.errors?.['required']">
+                                        Max İskonto alanı zorunlu.
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +179,7 @@
                             <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
                                     (click)="hideDialog()"></button>
                             <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
-                                    type="submit" [disabled]="productForm.invalid" (click)="saveUser()"></button>
+                                    type="submit" [disabled]="productForm.invalid" (click)="saveProduct()"></button>
                         </ng-template>
                     </p-card>
                 </div>

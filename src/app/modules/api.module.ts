@@ -22,6 +22,8 @@ import {MessageService} from "primeng/api";
 import {HttpSecurityInterceptor} from "./interceptor/http-security-interceptor";
 import { ProductGroupComponent } from './product-group/product-group.component';
 import { ProductComponent } from './product/product.component';
+import {InputNumberModule} from "primeng/inputnumber";
+import {DropdownModule} from "primeng/dropdown";
 
 /**
  * Module that provides all services and configuration.
@@ -39,7 +41,9 @@ import { ProductComponent } from './product/product.component';
         NgClass,
         ButtonModule,
         RippleModule,
-        DatePipe
+        DatePipe,
+        InputNumberModule,
+        DropdownModule
     ],
     exports: [],
     declarations: [UserComponent, ProductGroupComponent, ProductComponent],

@@ -32,6 +32,7 @@ import {AppHelpComponent} from './pages/app.help.component';
 import {BlocksComponent} from './blocks/blocks/blocks.component';
 import {UserComponent} from "./modules/user/user.component";
 import {ProductGroupComponent} from "./modules/product-group/product-group.component";
+import {ProductComponent} from "./modules/product/product.component";
 
 @NgModule({
     imports: [
@@ -67,6 +68,7 @@ import {ProductGroupComponent} from "./modules/product-group/product-group.compo
                     {path: 'blocks', component: BlocksComponent},
                     {path: 'ecs/users', component: UserComponent},
                     {path: 'ecs/product-groups', component: ProductGroupComponent},
+                    {path: 'ecs/products', component: ProductComponent},
                 ]
             },
             {path: 'error', component: AppErrorComponent},

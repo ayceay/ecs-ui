@@ -24,7 +24,8 @@ export class AppMenuComponent implements OnInit {
                 label: 'Ecs', icon: 'pi pi-fw pi-star', routerLink: ['/ecs'], badge: 6,
                 items: [
                     {label: 'Kullanıcı', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/users']},
-                    {label: 'Ürün Grubu', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/product-groups']}
+                    {label: 'Ürün Grubu', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/product-groups']},
+                    {label: 'Ürün', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/products']}
                 ]
             },
             {
