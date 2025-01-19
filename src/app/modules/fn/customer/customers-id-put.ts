@@ -8,16 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { User } from '../../models/user';
+import { Customer } from '../../models/customer';
 
-export interface UsersIdPut$Params {
+export interface CustomersIdPut$Params {
   id: string;
   authorization?: string;
-      body: User
+      body: Customer
 }
 
-export function usersIdPut(http: HttpClient, rootUrl: string, params: UsersIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, usersIdPut.PATH, 'put');
+export function customersIdPut(http: HttpClient, rootUrl: string, params: CustomersIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, customersIdPut.PATH, 'put');
   if (params) {
     rb.path('id', params.id, {});
     rb.header('authorization', params.authorization, {});
@@ -34,4 +34,4 @@ export function usersIdPut(http: HttpClient, rootUrl: string, params: UsersIdPut
   );
 }
 
-usersIdPut.PATH = '/users/{id}';
+customersIdPut.PATH = '/customers/{id}';

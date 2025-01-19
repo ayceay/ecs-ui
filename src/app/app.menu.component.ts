@@ -25,7 +25,9 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     {label: 'Kullanıcı', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/users']},
                     {label: 'Ürün Grubu', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/product-groups']},
-                    {label: 'Ürün', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/products']}
+                    {label: 'Ürün', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/products']},
+                    {label: 'Müşteri Grubu', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/customer-groups']},
+                    {label: 'Müşteri', icon: 'pi pi-fw pi-id-card', routerLink: ['/ecs/customers']}
                 ]
             },
             {

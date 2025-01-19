@@ -33,6 +33,8 @@ import {BlocksComponent} from './blocks/blocks/blocks.component';
 import {UserComponent} from "./modules/user/user.component";
 import {ProductGroupComponent} from "./modules/product-group/product-group.component";
 import {ProductComponent} from "./modules/product/product.component";
+import {CustomerGroupComponent} from "./modules/customer-group/customer-group.component";
+import {CustomerComponent} from "./modules/customer/customer.component";
 
 @NgModule({
     imports: [
@@ -51,7 +53,10 @@ import {ProductComponent} from "./modules/product/product.component";
                     {path: 'uikit/tree', component: TreeDemoComponent},
                     {path: 'uikit/panel', component: PanelsDemoComponent},
                     {path: 'uikit/overlay', component: OverlaysDemoComponent},
-                    {path: 'uikit/menu', loadChildren: () => import('./demo/view/menus/menus.module').then(m => m.MenusModule)},
+                    {
+                        path: 'uikit/menu',
+                        loadChildren: () => import('./demo/view/menus/menus.module').then(m => m.MenusModule)
+                    },
                     {path: 'uikit/media', component: MediaDemoComponent},
                     {path: 'uikit/message', component: MessagesDemoComponent},
                     {path: 'uikit/misc', component: MiscDemoComponent},
@@ -69,6 +74,8 @@ import {ProductComponent} from "./modules/product/product.component";
                     {path: 'ecs/users', component: UserComponent},
                     {path: 'ecs/product-groups', component: ProductGroupComponent},
                     {path: 'ecs/products', component: ProductComponent},
+                    {path: 'ecs/customer-groups', component: CustomerGroupComponent},
+                    {path: 'ecs/customers', component: CustomerComponent},
                 ]
             },
             {path: 'error', component: AppErrorComponent},

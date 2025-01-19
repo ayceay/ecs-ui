@@ -8,30 +8,28 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { User } from '../../models/user';
+import { CustomerGroup } from '../../models/customer-group';
 
-export interface UsersIdPut$Params {
+export interface CustomerGroupsIdGet$Xml$Params {
   id: string;
   authorization?: string;
-      body: User
 }
 
-export function usersIdPut(http: HttpClient, rootUrl: string, params: UsersIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, usersIdPut.PATH, 'put');
+export function customerGroupsIdGet$Xml(http: HttpClient, rootUrl: string, params: CustomerGroupsIdGet$Xml$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomerGroup>> {
+  const rb = new RequestBuilder(rootUrl, customerGroupsIdGet$Xml.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
     rb.header('authorization', params.authorization, {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'blob', accept: 'application/xml', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<CustomerGroup>;
     })
   );
 }
 
-usersIdPut.PATH = '/users/{id}';
+customerGroupsIdGet$Xml.PATH = '/customer-groups/{id}';

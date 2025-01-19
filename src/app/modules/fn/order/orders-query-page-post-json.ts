@@ -8,30 +8,29 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { User } from '../../models/user';
+import { OrderPaginationModel } from '../../models/order-pagination-model';
+import { OrderQuery } from '../../models/order-query';
 
-export interface UsersIdPut$Params {
-  id: string;
+export interface OrdersQueryPagePost$Json$Params {
   authorization?: string;
-      body: User
+      body: OrderQuery
 }
 
-export function usersIdPut(http: HttpClient, rootUrl: string, params: UsersIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, usersIdPut.PATH, 'put');
+export function ordersQueryPagePost$Json(http: HttpClient, rootUrl: string, params: OrdersQueryPagePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<OrderPaginationModel>> {
+  const rb = new RequestBuilder(rootUrl, ordersQueryPagePost$Json.PATH, 'post');
   if (params) {
-    rb.path('id', params.id, {});
     rb.header('authorization', params.authorization, {});
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<OrderPaginationModel>;
     })
   );
 }
 
-usersIdPut.PATH = '/users/{id}';
+ordersQueryPagePost$Json.PATH = '/orders/queryPage';

@@ -8,20 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { User } from '../../models/user';
 
-export interface UsersIdPut$Params {
-  id: string;
+export interface CustomersDelete$Params {
   authorization?: string;
-      body: User
 }
 
-export function usersIdPut(http: HttpClient, rootUrl: string, params: UsersIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, usersIdPut.PATH, 'put');
+export function customersDelete(http: HttpClient, rootUrl: string, params?: CustomersDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, customersDelete.PATH, 'delete');
   if (params) {
-    rb.path('id', params.id, {});
     rb.header('authorization', params.authorization, {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -34,4 +29,4 @@ export function usersIdPut(http: HttpClient, rootUrl: string, params: UsersIdPut
   );
 }
 
-usersIdPut.PATH = '/users/{id}';
+customersDelete.PATH = '/customers/';

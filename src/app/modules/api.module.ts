@@ -24,6 +24,9 @@ import { ProductGroupComponent } from './product-group/product-group.component';
 import { ProductComponent } from './product/product.component';
 import {InputNumberModule} from "primeng/inputnumber";
 import {DropdownModule} from "primeng/dropdown";
+import {CustomerGroupComponent} from "./customer-group/customer-group.component";
+import {CustomerComponent} from "./customer/customer.component";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 /**
  * Module that provides all services and configuration.
@@ -43,10 +46,11 @@ import {DropdownModule} from "primeng/dropdown";
         RippleModule,
         DatePipe,
         InputNumberModule,
-        DropdownModule
+        DropdownModule,
+        InputTextareaModule
     ],
     exports: [],
-    declarations: [UserComponent, ProductGroupComponent, ProductComponent],
+    declarations: [UserComponent, ProductGroupComponent, ProductComponent, CustomerGroupComponent, CustomerComponent],
     providers: [
         UserService,
         ApiConfiguration,

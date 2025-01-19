@@ -1,38 +1,40 @@
 import {Component, inject, OnInit, ViewChild} from '@angular/core';
-import {Table, TableLazyLoadEvent, TableSelectAllChangeEvent} from "primeng/table";
-import {FormBuilder, Validators} from "@angular/forms";
-import {User} from "../models/user";
 import {FilterMetadata, MessageService} from "primeng/api";
 import {AppBreadcrumbService} from "../../app.breadcrumb.service";
-import {ProductGroup} from "../models/product-group";
-import {ProductGroupService} from "../services/product-group.service";
+import {Customer} from "../models/customer";
+import {CustomerService} from "../services/customer.service";
+import {Table, TableLazyLoadEvent, TableSelectAllChangeEvent} from "primeng/table";
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'app-product-group',
-  templateUrl: './product-group.component.html'
+    selector: 'app-customer',
+    templateUrl: './customer.component.html'
 })
-export class ProductGroupComponent implements OnInit {
+export class CustomerComponent implements OnInit {
     @ViewChild('dt') table: Table;
 
     private formBuilder = inject(FormBuilder);
 
-    productGroupForm = this.formBuilder.group({
-        name: ['', Validators.required]
+    customerForm = this.formBuilder.group({
+        name: new FormControl("", [Validators.required]),
+        surname: new FormControl("", [Validators.required]),
+        phone: new FormControl("", [Validators.required]),
+        address: new FormControl(""),
     });
 
     loading = false;
 
-    productGroupDialog: boolean;
+    customerDialog: boolean;
 
-    deleteProductGroupDialog: boolean = false;
+    deleteCustomerDialog: boolean = false;
 
-    deleteProductGroupsDialog: boolean = false;
+    deleteCustomersDialog: boolean = false;
 
-    productGroups: ProductGroup[];
+    customers: Customer[];
 
-    productGroup: ProductGroup;
+    customer: Customer;
 
-    selectedProductGroups: ProductGroup[];
+    selectedCustomers: Customer[];
 
     submitted: boolean;
 
@@ -42,7 +44,7 @@ export class ProductGroupComponent implements OnInit {
 
     totalRecords: number;
 
-    constructor(private productGroupService: ProductGroupService, private messageService: MessageService,
+    constructor(private customerService: CustomerService, private messageService: MessageService,
                 private breadcrumbService: AppBreadcrumbService) {
 
         this.breadcrumbService.setItems([
@@ -55,15 +57,14 @@ export class ProductGroupComponent implements OnInit {
         this.refresh();
     }
 
-    loadProductGroups(event: TableLazyLoadEvent) {
+    loadCustomers(event: TableLazyLoadEvent) {
         let dtFilter: { [k: string]: any; };
         if (event.filters) {
             dtFilter = Object.fromEntries(Object.entries(event.filters).map(([key, value]) => [key, (value as FilterMetadata).value]));
         }
         this.loading = true;
-        console.log(event);
         let pageNumber = (event.first === 0 || event.first == undefined) ? 0 : event.first / (event.rows == undefined ? 1 : event.rows);
-        this.productGroupService.productGroupsQueryPagePost$Json({
+        this.customerService.customersQueryPagePost$Json({
             body: {
                 page: pageNumber,
                 size: event.rows,
@@ -71,7 +72,7 @@ export class ProductGroupComponent implements OnInit {
             }
         }).subscribe({
             next: data => {
-                this.productGroups = data.tutorials;
+                this.customers = data.tutorials;
                 this.totalRecords = data.totalItems;
             },
             error: err => {
@@ -86,40 +87,40 @@ export class ProductGroupComponent implements OnInit {
     openNew() {
         this.refresh();
         this.submitted = false;
-        this.productGroupDialog = true;
+        this.customerDialog = true;
     }
 
-    deleteSelectedProductGroups() {
-        this.deleteProductGroupsDialog = true;
+    deleteSelectedCustomers() {
+        this.deleteCustomersDialog = true;
     }
 
-    editProductGroup(product_group: ProductGroup) {
+    editCustomer(customer: Customer) {
         this.refresh();
-        this.productGroup = product_group;
-        this.productGroupForm.patchValue(product_group);
-        this.productGroupDialog = true;
+        this.customer = customer;
+        this.customerForm.patchValue(customer);
+        this.customerDialog = true;
     }
 
-    deleteUser(product_group: ProductGroup) {
-        this.deleteProductGroupDialog = true;
-        this.productGroup = {...product_group};
+    deleteCustomer(customer: Customer) {
+        this.deleteCustomerDialog = true;
+        this.customer = {...customer};
     }
 
     confirmDeleteSelected() {
-        this.deleteProductGroupsDialog = false;
-        this.productGroups = this.productGroups.filter(val => !this.selectedProductGroups.includes(val));
+        this.deleteCustomersDialog = false;
+        this.customers = this.customers.filter(val => !this.selectedCustomers.includes(val));
         this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});
-        this.selectedProductGroups = null;
+        this.selectedCustomers = null;
     }
 
     confirmDelete() {
-        this.deleteProductGroupDialog = false;
-        this.productGroupService.productGroupsIdDelete({id: this.productGroup.id.toString()}).subscribe({
+        this.deleteCustomerDialog = false;
+        this.customerService.customersIdDelete({id: this.customer.id.toString()}).subscribe({
             next: data => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Başarılı',
-                    detail: 'Ürün Grubu Silindi',
+                    detail: 'Cari Silindi',
                     life: 3000
                 });
                 this.table.reset();
@@ -128,7 +129,7 @@ export class ProductGroupComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Hata',
-                    detail: 'Ürün Grubu Silinirken Hata! error: ' + err,
+                    detail: 'Cari Silinirken Hata! error: ' + err,
                     life: 3000
                 });
             },
@@ -136,23 +137,23 @@ export class ProductGroupComponent implements OnInit {
                 this.refresh();
             }
         })
-        this.productGroup = {};
+        this.customer = null;
     }
 
     hideDialog() {
         this.refresh();
-        this.productGroupDialog = false;
+        this.customerDialog = false;
         this.submitted = false;
     }
 
-    saveUser() {
-        if (this.productGroup) {
-            this.productGroupService.productGroupsIdPut({id: this.productGroup.id.toString(), body: this.productGroupForm.value}).subscribe({
+    saveCustomer() {
+        if (this.customer && this.customerForm.valid) {
+            this.customerService.customersIdPut({id: this.customer.id.toString(), body: this.customerForm.value}).subscribe({
                 next: data => {
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Başarılı',
-                        detail: 'Ürün Grubu Güncellendi',
+                        detail: 'Cari Güncellendi',
                         life: 3000
                     });
                     this.table.reset();
@@ -163,18 +164,18 @@ export class ProductGroupComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Hata',
-                        detail: 'Ürün Grubu Güncellenirken Hata! error: ' + err,
+                        detail: 'Cari Güncellenirken Hata! error: ' + err,
                         life: 3000
                     });
                 }
             });
         } else {
-            this.productGroupService.productGroupsPost$Json({body: this.productGroupForm.value}).subscribe({
+            this.customerService.customersPost$Json({body: this.customerForm.value}).subscribe({
                 next: data => {
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Başarılı',
-                        detail: 'Ürün Grubu Oluşturuldu',
+                        detail: 'Cari Oluşturuldu',
                         life: 3000
                     });
                     this.table.reset();
@@ -185,7 +186,7 @@ export class ProductGroupComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Hata',
-                        detail: 'Ürün Grubu Oluşturulurken Hata! error: ' + err,
+                        detail: 'Cari Oluşturulurken Hata! error: ' + err,
                         life: 3000
                     });
                 }
@@ -204,12 +205,21 @@ export class ProductGroupComponent implements OnInit {
     }
 
     get name() {
-        return this.productGroupForm.get('name');
+        return this.customerForm.get('name');
+    }
+
+    get surname() {
+        return this.customerForm.get('surname');
+    }
+
+    get phone() {
+        return this.customerForm.get('phone');
     }
 
     refresh() {
-        this.productGroupForm.reset();
-        this.selectedProductGroups = [];
-        this.productGroup = null;
+        this.customerForm.reset();
+        this.selectedCustomers = [];
+        this.customer = null;
     }
+
 }

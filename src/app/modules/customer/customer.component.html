@@ -8,18 +8,18 @@
                         <button pButton pRipple label="Yeni Kayıt" icon="pi pi-plus" class="p-button-success mr-2"
                                 (click)="openNew()"></button>
                         <button pButton pRipple label="Sil" icon="pi pi-trash" class="p-button-danger"
-                                (click)="deleteSelectedUsers()"
-                                [disabled]="!selectedUsers || !selectedUsers.length"></button>
+                                (click)="deleteSelectedCustomers()"
+                                [disabled]="!selectedCustomers || !selectedCustomers.length"></button>
                     </div>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="users"
+            <p-table #dt [value]="customers"
                      [lazy]="true"
-                     (onLazyLoad)="loadUsers($event)"
+                     (onLazyLoad)="loadCustomers($event)"
                      dataKey="id"
                      [tableStyle]="{ 'min-width': '75rem' }"
-                     [(selection)]="selectedUsers"
+                     [(selection)]="selectedCustomers"
                      (selectionChange)="onSelectionChange($event)"
                      [selectionPageOnly]="true"
                      [paginator]="true"
@@ -30,7 +30,7 @@
                      [loading]="loading">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Kullanıcı Yönetimi</h5>
+                        <h5 class="m-0">Cari Yönetimi</h5>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -50,10 +50,16 @@
                                 <p-sortIcon field="surname"></p-sortIcon>
                             </div>
                         </th>
-                        <th pSortableColumn="username">
+                        <th pSortableColumn="phone">
                             <div class="flex justify-content-between align-items-center">
-                                Kullanıcı Adı
-                                <p-sortIcon field="username">Kullanıcı Adı</p-sortIcon>
+                                Cari Adı
+                                <p-sortIcon field="phone">Cari Telefon</p-sortIcon>
+                            </div>
+                        </th>
+                        <th pSortableColumn="address">
+                            <div class="flex justify-content-between align-items-center">
+                                Cari Adres
+                                <p-sortIcon field="address">Cari Adres</p-sortIcon>
                             </div>
                         </th>
                         <th pSortableColumn="created_at">
@@ -93,9 +99,11 @@
                         </th>
                         <th>
                             <div class="flex justify-content-between align-items-center">
-                                <p-columnFilter type="text" field="username" [showMenu]="false"
-                                                placeholder="Kullanıcı Ada Göre Ara"></p-columnFilter>
+                                <p-columnFilter type="text" field="phone" [showMenu]="false"
+                                                placeholder="Cari Telefona Göre Ara"></p-columnFilter>
                             </div>
+                        </th>
+                        <th>
                         </th>
                         <th>
                         </th>
@@ -104,41 +112,45 @@
 
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-user>
+                <ng-template pTemplate="body" let-customer>
                     <tr>
                         <td>
-                            <p-tableCheckbox [value]="user"></p-tableCheckbox>
+                            <p-tableCheckbox [value]="customer"></p-tableCheckbox>
                         </td>
                         <td style="width:14%; min-width:10rem;"><span class="p-column-title">Ad</span>
-                            {{ user.name }}
+                            {{ customer.name }}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Soyad</span>
-                            {{ user.surname }}
+                            {{ customer.surname }}
                         </td>
                         <td style="width:14%; min-width:10rem;">
-                            <span class="p-column-title">Kullanıcı Adı</span>
-                            {{ user.username }}
+                            <span class="p-column-title">Cari Adı</span>
+                            {{ customer.phone }}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Cari Adres</span>
+                            {{ customer.address }}
                         </td>
                         <td style="width:14%; min-width:8rem;">
                             <span class="p-column-title">Oluşturulma Tarihi</span>
-                            {{ user.createdAt | date }}
+                            {{ customer.createdAt | date }}
                         </td>
                         <td style="width:14%; min-width:8rem;">
                             <span class="p-column-title">Güncelleme Tarihi</span>
-                            {{ user.updatedAt | date }}
+                            {{ customer.updatedAt | date }}
                         </td>
                         <td style="width:14%; min-width:8rem;">
                             <span class="p-column-title">Oluşturan/Güncelleyen</span>
-                            {{ user.changed_by }}
+                            {{ customer.changed_by }}
                         </td>
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button-rounded p-button-success mr-2"
-                                        (click)="editUser(user)"></button>
+                                        (click)="editCustomer(customer)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                                        (click)="deleteUser(user)"></button>
+                                        (click)="deleteCustomer(customer)"></button>
                             </div>
                         </td>
                     </tr>
@@ -146,9 +158,9 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="userDialog" [style]="{width: '450px'}" header="Kullanıcı Oluşturma" [modal]="true"
+        <p-dialog [(visible)]="customerDialog" [style]="{width: '450px'}" header="Cari Oluşturma" [modal]="true"
                   class="p-fluid">
-            <form [formGroup]="userForm">
+            <form [formGroup]="customerForm">
                 <div class="form-group">
                     <p-card>
                         <ng-template pTemplate="content">
@@ -174,15 +186,27 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label for="username">Kullanıcı Adı: </label>
-                                <input type="text" pInputText id="username" formControlName="username" autofocus
-                                       [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.username}"/>
-                                <div *ngIf="username.invalid && (username.dirty || username.touched)"
+                                <label for="phone">Cari Telefon: </label>
+                                <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                       pInputText id="phone" formControlName="phone" autofocus
+                                       [ngClass]="{'ng-invalid ng-dirty' : submitted && !customer.phone}"/>
+                                <div *ngIf="phone.invalid && (phone.dirty || phone.touched)"
                                      class="alert alert-danger">
-                                    <div *ngIf="username.errors?.['required']">
-                                        Kullanıcı adı alanı zorunlu.
+                                    <div *ngIf="phone.errors?.['required']">
+                                        Cari telefon alanı zorunlu.
                                     </div>
                                 </div>
+                            </div>
+                            <div class="field">
+                                <label for="address">Cari Adres: </label>
+                                <textarea
+                                    id="address"
+                                    rows="5"
+                                    cols="30"
+                                    pInputTextarea
+                                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !customer.address}"
+                                    formControlName="address">
+                                </textarea>
                             </div>
 
                         </ng-template>
@@ -190,7 +214,7 @@
                             <button pButton pRipple label="Vazgeç" icon="pi pi-times" class="p-button-text"
                                     (click)="hideDialog()"></button>
                             <button pButton pRipple label="Kaydet" icon="pi pi-check" class="p-button-text"
-                                    type="submit" [disabled]="userForm.invalid" (click)="saveUser()"></button>
+                                    type="submit" [disabled]="customerForm.invalid" (click)="saveCustomer()"></button>
                         </ng-template>
                     </p-card>
                 </div>
@@ -198,27 +222,27 @@
             </form>
         </p-dialog>
 
-        <p-dialog [(visible)]="deleteUserDialog" header="Onay Ekranı" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="deleteCustomerDialog" header="Onay Ekranı" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="user">Kullanıcıyı Silmek İstiyor musunuz? <b>{{ user.name }}</b>?</span>
+                <span *ngIf="customer">Cariyi Silmek İstiyor musunuz? <b>{{ customer.name }}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Hayır"
-                        (click)="deleteUserDialog = false"></button>
+                        (click)="deleteCustomerDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Evet"
                         (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="deleteUsersDialog" header="Onay Ekranı" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="deleteCustomersDialog" header="Onay Ekranı" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Seçilen Kullanıcıyı Silmek İstediğinize Emin misiniz?</span>
+                <span>Seçilen Müşteriyi Silmek İstediğinize Emin misiniz?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Hayır"
-                        (click)="deleteUsersDialog = false"></button>
+                        (click)="deleteCustomersDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Evet"
                         (click)="confirmDeleteSelected()"></button>
             </ng-template>
