@@ -4,5 +4,5 @@
 
 export interface Authentication {
   password?: string;
-  surname?: string;
+  username?: string;
 }

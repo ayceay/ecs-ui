@@ -10,18 +10,18 @@
                 </div>
                 <div class="col-12">
                     <span class="p-float-label">
-                        <input type="text" pInputText>
+                        <input type="text" pInputText [(ngModel)]="username">
                         <label>Username</label>
                     </span>
                 </div>
                 <div class="col-12">
                     <span class="p-float-label">
-                        <input type="text" pInputText>
+                        <input type="text" pInputText [(ngModel)]="password">
                         <label>Password</label>
                     </span>
                 </div>
                 <div class="col-12">
-                    <button pButton type="button" label="Sign In" icon="pi pi-user"></button>
+                    <button pButton type="button" label="Sign In" icon="pi pi-user" (click)="login()"></button>
                 </div>
                 <div class="col-12">
                     Don't have an account? <a href="#">Sign Up</a> now.
@@ -30,3 +30,4 @@
         </div>
     </div>
 </div>
+<p-toast/>

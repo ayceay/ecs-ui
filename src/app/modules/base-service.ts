@@ -9,7 +9,9 @@ import { ApiConfiguration } from './api-configuration';
 /**
  * Base class for services
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BaseService {
   constructor(
     protected config: ApiConfiguration,
