@@ -26,9 +26,19 @@ export class AppLoginComponent {
             });
             return;
         }
-        this.authService.login(this.username, this.password).subscribe(res => {
-            this.authService.setSession(res);
-            this.router.navigate(['/']).then();
-        });;
+        this.authService.login(this.username, this.password).subscribe({
+            next: result => {
+                this.authService.setSession(result);
+                this.router.navigate(['/']).then();
+            },
+            error: err => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Hata',
+                    detail: 'Kullanıcı Ad/Şifre Hatalı.'
+                });
+            },
+            complete: () => {}
+        });
     }
 }

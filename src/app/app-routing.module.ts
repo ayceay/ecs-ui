@@ -10,6 +10,7 @@ import {ProductGroupComponent} from "./modules/product-group/product-group.compo
 import {ProductComponent} from "./modules/product/product.component";
 import {CustomerGroupComponent} from "./modules/customer-group/customer-group.component";
 import {CustomerComponent} from "./modules/customer/customer.component";
+import {AuthGuard} from "./modules/guard/auth-guard";
 
 @NgModule({
     imports: [
@@ -17,11 +18,11 @@ import {CustomerComponent} from "./modules/customer/customer.component";
             {
                 path: '', component: AppMainComponent,
                 children: [
-                    {path: 'ecs/users', component: UserComponent},
-                    {path: 'ecs/product-groups', component: ProductGroupComponent},
-                    {path: 'ecs/products', component: ProductComponent},
-                    {path: 'ecs/customer-groups', component: CustomerGroupComponent},
-                    {path: 'ecs/customers', component: CustomerComponent},
+                    {path: 'ecs/users', component: UserComponent, canActivate: [AuthGuard]},
+                    {path: 'ecs/product-groups', component: ProductGroupComponent, canActivate: [AuthGuard]},
+                    {path: 'ecs/products', component: ProductComponent, canActivate: [AuthGuard]},
+                    {path: 'ecs/customer-groups', component: CustomerGroupComponent, canActivate: [AuthGuard]},
+                    {path: 'ecs/customers', component: CustomerComponent, canActivate: [AuthGuard]},
                 ]
             },
             {path: 'error', component: AppErrorComponent},

@@ -25,6 +25,13 @@ export class AuthService {
         // localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
     }
 
+    getSession() {
+        // const expiresAt = moment().add(authResult.expiresIn,'second');
+
+        return localStorage.getItem('id_token');
+        // localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
+    }
+
     logout() {
         localStorage.removeItem("id_token");
         // localStorage.removeItem("expires_at");
